@@ -1,0 +1,27 @@
+{
+  "app": {
+    "name": "chat-app-service"
+  },
+  "web": {
+    "prefork": false,
+    "port": 9000
+  },
+  "log": {
+    "level": 6
+  },
+  "jwt": {
+    "secret": "823012fa-71b7-4404-a0b7-1996b74d444d"
+  },
+  "database": {
+    "username": "root",
+    "password": "password",
+    "host": "database",
+    "port": 3306,
+    "name": "chat-app",
+    "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    }
+  }
+}

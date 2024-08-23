@@ -1,0 +1,2 @@
+alter table messages add constraint fk_users_messages foreign key (sender_id) references users(id);
+alter table messages add constraint fk_conversations_messages foreign key (conversation_id) references conversations(id);

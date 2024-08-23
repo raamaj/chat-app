@@ -1,0 +1,224 @@
+basePath: /api
+definitions:
+  github_com_raamaj_chat-app_internal_model.ErrorResponse:
+    properties:
+      errors: {}
+    type: object
+  github_com_raamaj_chat-app_internal_model.MessageRequest:
+    properties:
+      content:
+        type: string
+      sender_id:
+        type: integer
+    type: object
+  github_com_raamaj_chat-app_internal_model.MessageResponse:
+    properties:
+      content:
+        type: string
+      conversation_id:
+        type: integer
+      id:
+        type: integer
+      sender_id:
+        type: integer
+      sent_at:
+        type: string
+    type: object
+  github_com_raamaj_chat-app_internal_model.PageMetadata:
+    properties:
+      page:
+        type: integer
+      size:
+        type: integer
+      total_item:
+        type: integer
+      total_page:
+        type: integer
+    type: object
+  github_com_raamaj_chat-app_internal_model.RegisterUserRequest:
+    properties:
+      email:
+        example: johndoe@example.com
+        maxLength: 100
+        type: string
+      password:
+        example: "123456"
+        maxLength: 50
+        type: string
+      username:
+        example: johndoe
+        maxLength: 20
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  github_com_raamaj_chat-app_internal_model.UserResponse:
+    properties:
+      created_at:
+        example: "2020-01-01T00:00:00+09:00"
+        type: string
+      email:
+        example: johndoe@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      username:
+        example: johndoe
+        type: string
+    type: object
+  github_com_raamaj_chat-app_internal_model.WebResponse-github_com_raamaj_chat-app_internal_model_MessageResponse:
+    properties:
+      data:
+        $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.MessageResponse'
+      errors:
+        $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+      paging:
+        $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.PageMetadata'
+    type: object
+  github_com_raamaj_chat-app_internal_model.WebResponse-github_com_raamaj_chat-app_internal_model_UserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.UserResponse'
+      errors:
+        $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+      paging:
+        $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.PageMetadata'
+    type: object
+host: localhost:9000
+info:
+  contact:
+    email: jayapermanarama@gmail.com
+    name: Rama Jayapermana
+  description: This is a sample Chat App
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Chat App API
+  version: "1.0"
+paths:
+  /conversations/{conversationId}/messages:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all messages in a conversation.
+      parameters:
+      - description: Conversation ID
+        in: path
+        name: conversationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.WebResponse-github_com_raamaj_chat-app_internal_model_MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+      summary: Retrieve all messages in a conversation.
+      tags:
+      - Message
+    post:
+      consumes:
+      - application/json
+      description: Send a message in a conversation.
+      parameters:
+      - description: Message Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.MessageRequest'
+      - description: Conversation ID
+        in: path
+        name: conversationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.WebResponse-github_com_raamaj_chat-app_internal_model_MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+      summary: Send a message in a conversation.
+      tags:
+      - Message
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user.
+      parameters:
+      - description: User Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.WebResponse-github_com_raamaj_chat-app_internal_model_UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+      summary: Create a new user.
+      tags:
+      - Users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve user details by ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.WebResponse-github_com_raamaj_chat-app_internal_model_UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_raamaj_chat-app_internal_model.ErrorResponse'
+      summary: Retrieve user details by ID.
+      tags:
+      - Users
+swagger: "2.0"
