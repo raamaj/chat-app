@@ -27,19 +27,23 @@ func Bootstrap(config *BootstrapConfig) {
 	userRepository := repository.NewUserRepository(config.Log)
 	messageRepository := repository.NewMessageRepository(config.Log)
 	conversationRepository := repository.NewConversationRepository(config.Log)
+	articleRepository := repository.NewArticleRepository(config.Log)
 
 	// setup use cases
 	userUseCase := usecase.NewUserUseCase(config.DB, config.Log, config.Validate, userRepository)
 	messageUseCase := usecase.NewMessageUseCase(config.DB, config.Log, config.Validate, messageRepository, conversationRepository, userRepository)
+	articleUseCase := usecase.NewArticleUseCase(config.Log, config.DB, articleRepository)
 
 	// setup controller
 	userController := http.NewUserController(userUseCase, config.Log)
 	messageController := http.NewMessageController(messageUseCase, config.Log)
+	articleController := http.NewArticleController(config.Log, articleUseCase)
 
 	routeConfig := route.RouteConfig{
 		App:               config.App,
 		UserController:    userController,
 		MessageController: messageController,
+		ArticleController: articleController,
 		Cache:             config.Cache,
 		JWTSecret:         config.Config.GetString("jwt.secret"),
 	}

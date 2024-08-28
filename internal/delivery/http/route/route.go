@@ -13,6 +13,7 @@ type RouteConfig struct {
 	App               *fiber.App
 	UserController    *http.UserController
 	MessageController *http.MessageController
+	ArticleController *http.ArticleController
 	AuthMiddleware    fiber.Handler
 	Cache             *redis.Client
 	JWTSecret         string
@@ -32,4 +33,6 @@ func (c *RouteConfig) SetupGuestRoute() {
 
 	c.App.Post("/api/conversations/:conversationId/messages", c.MessageController.SendMessage)
 	c.App.Get("/api/conversations/:conversationId/messages", c.MessageController.GetMessages)
+
+	c.App.Get("/api/articles", c.ArticleController.GetArticles)
 }
